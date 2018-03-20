@@ -42,7 +42,7 @@ class FooType {
     /**
      * @var array
      *
-     * @ElasticORM\Field(name="custom_nested_field", type="nested")
+     * @ElasticORM\Field(name="fooNested", type="nested")
      */
     private $customNestedField = [];
 
