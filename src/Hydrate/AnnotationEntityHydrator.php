@@ -4,6 +4,7 @@ namespace DoctrineElastic\Hydrate;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
+use DoctrineElastic\Elastic\FieldTypes;
 use DoctrineElastic\Mapping\Field;
 
 /**
@@ -67,7 +68,20 @@ class AnnotationEntityHydrator extends SimpleEntityHydrator {
             }
 
             if (isset($data[$annotation->name])) {
-                $dataAnnotations[$propName] = $data[$annotation->name];
+                if ($annotation->type === FieldTypes::NESTED
+                    && class_exists($annotation->name)) {
+                    foreach ($data[$annotation->name] as $nested_value) {
+
+                        $dataAnnotations[$propName][] =
+                            $this->hydrateByAnnotation(
+                                new $annotation->name,
+                                $annotationClass,
+                                $nested_value
+                            );
+                    }
+                } else {
+                    $dataAnnotations[$propName] = $data[$annotation->name];
+                }
             }
         }
 

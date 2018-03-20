@@ -20,6 +20,7 @@ use DoctrineElastic\Mapping\Type;
 use DoctrineElastic\Query\ElasticQueryExecutor;
 use DoctrineElastic\Query\Walker\Helper\WalkerHelper;
 use DoctrineElastic\Query\Walker\OperatorsMap;
+use DoctrineElastic\Elastic\FieldTypes;
 
 /**
  * Entity Persister for this doctrine elastic extension
@@ -217,7 +218,7 @@ class ElasticEntityPersister {
                     $propertiesMapping[$ESField->name] = ['type' => $ESField->type];
 
                     foreach ($ESField->getArrayCopy() as $prop => $propValue) {
-                        if ($ESField->type == 'nested' && ($prop == 'boost' || $prop == 'index')) {
+                        if ($ESField->type == FieldTypes::NESTED && ($prop == 'boost' || $prop == 'index')) {
                             continue;
                         }
                         if (!is_null($propValue) && $prop != 'name') {
